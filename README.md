@@ -1,4 +1,10 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Next Events
+
+## Next.js Project on File-Based Routing
+
+Next Events is a project from [Next.js & React - The Complete Guide](https://www.udemy.com/course/nextjs-react-the-complete-guide). It covers the basics of file-based / dynamic routing in Next.js. This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+
+---
 
 ## Getting Started
 
