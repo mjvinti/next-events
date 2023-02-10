@@ -1,4 +1,5 @@
 import EventList from "@/components/events/event-list";
+
 import { getFeaturedEvents } from "@/helpers/api-util";
 
 function HomePage({ events }) {
