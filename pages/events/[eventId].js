@@ -1,7 +1,8 @@
+import Head from "next/head";
+
 import EventSummary from "@/components/event-detail/event-summary";
 import EventLogistics from "@/components/event-detail/event-logistics";
 import EventContent from "@/components/event-detail/event-content";
-
 import { getEventById, getFeaturedEvents } from "@/helpers/api-util";
 
 function EventDetailPage({ event }) {
@@ -17,6 +18,10 @@ function EventDetailPage({ event }) {
 
   return (
     <>
+      <Head>
+        <title>{title}</title>
+        <meta name="description" content={description} />
+      </Head>
       <EventSummary title={title} />
       <EventLogistics
         address={location}
