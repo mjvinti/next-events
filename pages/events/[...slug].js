@@ -8,21 +8,17 @@ import ErrorAlert from "@/components/ui/error-alert";
 import { getFilteredEvents } from "@/helpers/api-util";
 
 function FilteredEventsPage({ events, date: { year, month }, hasError }) {
-  // const {
-  //   query: { slug },
-  // } = useRouter();
-
-  // if (!slug) {
-  //   return <p className="center">Loading...</p>;
-  // }
-
-  // const [year, month] = slug;
-  // const numYear = +year,
-  //   numMonth = +month;
+  const pageHeadData = (
+    <Head>
+      <title>Filtered Events</title>
+      <meta name="description" content={`All events for ${month}/${year}.`} />
+    </Head>
+  );
 
   if (hasError) {
     return (
       <>
+        {pageHeadData}
         <ErrorAlert>
           <p>Invalid filter. Please adjust your values!</p>
         </ErrorAlert>
@@ -36,6 +32,7 @@ function FilteredEventsPage({ events, date: { year, month }, hasError }) {
   if (!events || !events.length) {
     return (
       <>
+        {pageHeadData}
         <ErrorAlert>
           <p>No events found for the chosen filter!</p>
         </ErrorAlert>
@@ -50,10 +47,7 @@ function FilteredEventsPage({ events, date: { year, month }, hasError }) {
 
   return (
     <>
-      <Head>
-        <title>Filtered Events</title>
-        <meta name="description" content={`All events for ${month}/${year}.`} />
-      </Head>
+      {pageHeadData}
       <ResultsTitle date={date} />
       <EventList items={events} />
     </>
