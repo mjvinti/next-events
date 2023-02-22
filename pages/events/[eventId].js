@@ -1,5 +1,6 @@
 import Head from "next/head";
 
+import Comments from "@/components/input/comments";
 import EventSummary from "@/components/event-detail/event-summary";
 import EventLogistics from "@/components/event-detail/event-logistics";
 import EventContent from "@/components/event-detail/event-content";
@@ -14,7 +15,7 @@ function EventDetailPage({ event }) {
     );
   }
 
-  const { date, description, image, location, title } = event;
+  const { date, description, id, image, location, title } = event;
 
   return (
     <>
@@ -32,6 +33,7 @@ function EventDetailPage({ event }) {
       <EventContent>
         <p>{description}</p>
       </EventContent>
+      <Comments eventId={id} />
     </>
   );
 }
