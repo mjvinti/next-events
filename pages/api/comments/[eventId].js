@@ -1,9 +1,13 @@
-function handler(req, res) {
+import { MongoClient } from "mongodb";
+
+async function handler(req, res) {
   const {
     body: { comment, email, name },
     method,
     query: { eventId },
   } = req;
+
+  const client = await MongoClient.connect(process.env.DB_URL);
 
   if (method === "POST") {
     if (
@@ -13,16 +17,24 @@ function handler(req, res) {
       !comment ||
       !comment.trim().length
     ) {
+      client.close();
       return res.status(422).json({ message: "Invalid input." });
     }
 
+    const db = client.db();
+    const result = await db
+      .collection("comments")
+      .insertOne({ comment, email, eventId, name });
+    client.close();
+
     return res.status(201).json({
       message: "Added Comment.",
-      comment: { id: new Date().toISOString(), comment, email, name },
+      comment: { comment, email, name, id: result.insertedId },
     });
   }
 
   if (method === "GET") {
+    client.close();
     return res.status(200).json({
       comments: [
         { id: "c1", name: "Max", comment: "A first comment!" },
