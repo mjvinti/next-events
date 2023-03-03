@@ -34,13 +34,14 @@ async function handler(req, res) {
   }
 
   if (method === "GET") {
+    const db = client.db();
+    const comments = await db
+      .collection("comments")
+      .find()
+      .sort({ _id: -1 })
+      .toArray();
     client.close();
-    return res.status(200).json({
-      comments: [
-        { id: "c1", name: "Max", comment: "A first comment!" },
-        { id: "c2", name: "Manuel", comment: "A second comment!" },
-      ],
-    });
+    return res.status(200).json({ comments });
   }
 }
 

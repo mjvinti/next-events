@@ -3,8 +3,8 @@ import classes from "./comment-list.module.css";
 function CommentList({ items }) {
   return (
     <ul className={classes.comments}>
-      {items.map(({ comment, id, name }) => (
-        <li key={id}>
+      {items.map(({ comment, _id, name }) => (
+        <li key={_id}>
           <p>{comment}</p>
           <div>
             By <address>{name}</address>
