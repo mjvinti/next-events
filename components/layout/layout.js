@@ -6,16 +6,18 @@ import Notification from "../ui/notification";
 import NotificationContext from "@/store/notification-context";
 
 function Layout({ children }) {
-  const {
-    notification: { message, status, title },
-  } = useContext(NotificationContext);
+  const { notification } = useContext(NotificationContext);
 
   return (
     <>
       <MainHeader />
       <main>{children}</main>
       {notification && (
-        <Notification message={message} status={status} title={title} />
+        <Notification
+          message={notification.message}
+          status={notification.status}
+          title={notification.title}
+        />
       )}
     </>
   );
