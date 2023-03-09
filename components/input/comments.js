@@ -1,18 +1,28 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import CommentList from "./comment-list";
 import NewComment from "./new-comment";
+
+import NotificationContext from "@/store/notification-context";
+
 import classes from "./comments.module.css";
 
 function Comments({ eventId }) {
   const [showComments, setShowComments] = useState(false);
   const [comments, setComments] = useState([]);
+  const [isFetchingComments, setIsFetchingComments] = useState(false);
+
+  const { showNotification } = useContext(NotificationContext);
 
   useEffect(() => {
     if (showComments) {
+      setIsFetchingComments(true);
       fetch(`/api/comments/${eventId}`)
         .then((response) => response.json())
-        .then(({ comments }) => setComments(comments));
+        .then(({ comments }) => {
+          setComments(comments);
+          setIsFetchingComments(false);
+        });
     }
   }, [eventId, showComments]);
 
@@ -21,6 +31,12 @@ function Comments({ eventId }) {
   }
 
   function addCommentHandler(commentData) {
+    showNotification({
+      message: "Your comment is currently being stored into a database.",
+      status: "pending",
+      title: "Sending comment...",
+    });
+
     fetch(`/api/comments/${eventId}`, {
       method: "POST",
       body: JSON.stringify(commentData),
@@ -28,8 +44,29 @@ function Comments({ eventId }) {
         "Content-Type": "application/json",
       },
     })
-      .then((response) => response.json())
-      .then((data) => console.log(data));
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        }
+
+        return response.json().then((data) => {
+          throw new Error(data.message || "Something went wrong!");
+        });
+      })
+      .then((data) =>
+        showNotification({
+          message: "Your comment was saved!",
+          status: "success",
+          title: "Success!",
+        })
+      )
+      .catch((err) =>
+        showNotification({
+          message: err.message || "Something went wrong!",
+          status: "error",
+          title: "Error!",
+        })
+      );
   }
 
   return (
@@ -38,7 +75,8 @@ function Comments({ eventId }) {
         {showComments ? "Hide" : "Show"} Comments
       </button>
       {showComments && <NewComment onAddComment={addCommentHandler} />}
-      {showComments && <CommentList items={comments} />}
+      {showComments && !isFetchingComments && <CommentList items={comments} />}
+      {showComments && isFetchingComments && <p>Loading...</p>}
     </section>
   );
 }
